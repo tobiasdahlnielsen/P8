@@ -21,6 +21,7 @@ ACAS = getdbdata("ACAS",path)
 HBAN = getdbdata("HBAN",path)
 WFC <- getdbdata("WFC",path)
 
+
 library(tidyverse);library(magrittr)
 
 
@@ -42,6 +43,3 @@ lines(x,y_ACAS, col = "red")
 
 hist(HBAN$returns,breaks = 1000, xlim = c(-0.01, 0.01),probability = T)
 lines(x,y_HBAN, col = "red")
-
-
-
