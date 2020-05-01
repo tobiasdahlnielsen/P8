@@ -17,9 +17,9 @@ returns = function(df){
 
 
 
-ACAS = getdbdata("ACAS",path)
-HBAN = getdbdata("HBAN",path)
-WFC <- getdbdata("WFC",path)
+ACAS = getdbdata("ACAS")
+HBAN = getdbdata("HBAN")
+SPY  = getdbdata("SPY")
 
 
 library(tidyverse);library(magrittr)
@@ -30,9 +30,14 @@ HBAN %<>% returns
 SPY  %<>% returns
 
 allreturns <- cbind(SPY$returns,ACAS$returns,HBAN$returns)
-ACAS_fit <- fit.NIGuv(ACAS$returns)
-fittetdist <- fit.NIGmv(allreturns)
+fittetdist <- fit.NIGmv(allreturns,silent=TRUE)
 
+
+dghyp(rep(0.95,3), object = fittetdist)
+
+ESghyp(0.05, object = fittetdist, distr = c("return", "loss"))
+
+optvalues <- portfolio.optimize(fittetdist,risk.measure = "expected.shortfall",type = "minimum.risk",distr = "return")
 
 
 #Full Sample: 
@@ -40,6 +45,7 @@ ACAS_fit = ACAS %>% pull(returns) %>% .[-1] %>% nigFit(startValues = "MoM")
 HBAN_fit = HBAN %>% pull(returns) %>% .[-1] %>% nigFit(startValues = "MoM")
 
 x = seq(from = -0.01, to = 0.01, length.out = 1000)
+
 y_ACAS = sapply(x,function(x){dnig(x,param = ACAS_fit$param)})
 y_HBAN = sapply(x,function(x){dnig(x,param = HBAN_fit$param)})
 
