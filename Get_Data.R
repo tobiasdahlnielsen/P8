@@ -27,6 +27,11 @@ library(tidyverse);library(magrittr)
 
 ACAS %<>% returns
 HBAN %<>% returns
+SPY  %<>% returns
+
+allreturns <- cbind(SPY$returns,ACAS$returns,HBAN$returns)
+ACAS_fit <- fit.NIGuv(ACAS$returns)
+fittetdist <- fit.NIGmv(allreturns)
 
 
 
