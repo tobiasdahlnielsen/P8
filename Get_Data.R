@@ -30,14 +30,28 @@ HBAN %<>% returns
 SPY  %<>% returns
 
 allreturns <- cbind(SPY$returns,ACAS$returns,HBAN$returns)
-fittetdist <- fit.NIGmv(allreturns,silent=TRUE)
 
+tic()
+fittetdist <- fit.NIGmv(allreturns[1:391,],silent=TRUE)
+toc()
 
 dghyp(rep(0.95,3), object = fittetdist)
 
 ESghyp(0.05, object = fittetdist, distr = c("return", "loss"))
 
 optvalues <- portfolio.optimize(fittetdist,risk.measure = "expected.shortfall",type = "minimum.risk",distr = "return")
+
+ACAS %<>% mutate(Time = ymd_hms(utcsec), Price = price) %>% select(Time,Price)
+HBAN %<>% mutate(Time = ymd_hms(utcsec), Price = price) %>% select(Time,Price)
+SPY  %<>% mutate(Time = ymd_hms(utcsec), Price = price) %>% select(Time,Price)
+
+O = which(SPY[["Time"]] == SPY[["Time"]][1] + days(1)) - 1
+
+ACAS %>% ggplot(aes(x = Time, y = Price)) + geom_line()
+HBAN %>% ggplot(aes(x = Time, y = Price)) + geom_line()
+SPY  %>% ggplot(aes(x = Time, y = Price)) + geom_line()
+
+
 
 
 #Full Sample: 
