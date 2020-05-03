@@ -9,9 +9,14 @@ getdbdata = function(series,path = ""){
   return(result)
 }
 
-returns = function(df){
+logreturns = function(df){
   library(magrittr)
-  df %<>% mutate(returns = c(0,price %>% log %>% diff))
+  df %<>% mutate(logr= c(0,price %>% log %>% diff))
+  return(df)
+}
+simreturns =  function(df){
+  library(magrittr)
+  df %<>% mutate(simpler = logr %>% exp + 1 )
   return(df)
 }
 
@@ -25,9 +30,10 @@ SPY  = getdbdata("SPY")
 library(tidyverse);library(magrittr)
 
 
-ACAS %<>% returns
-HBAN %<>% returns
-SPY  %<>% returns
+ACAS %<>% logreturns %<>% simreturns
+HBAN %<>% logreturns# %<>% simreturns
+SPY  %<>% logreturns# %<>% simreturns
+
 
 allreturns <- cbind(SPY$returns,ACAS$returns,HBAN$returns)
 
