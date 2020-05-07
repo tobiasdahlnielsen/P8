@@ -44,9 +44,14 @@ SPY  %<>% mutate(Time = ymd_hms(utcsec), Price = price) %>% select(Time,Price,lo
 
 O = which(SPY[["Time"]] == SPY[["Time"]][1] + days(1)) - 1
 window <- 21
+<<<<<<< HEAD
 tic()
 for (i in 700:(756-window)) {
   print(i)
+=======
+for (i in 1:(756-window)) {
+  #print(i)
+>>>>>>> e9adb190aac0e54e15dcc5896c23f55bb4e3c94d
   if (i==1) {
     dist <- fit.NIGmv(alllogreturns[1:O*window,],silent=TRUE)
     optvalues <- portfolio.optimize(dist,risk.measure = "expected.shortfall",type = "minimum.risk",distr = "return",silent = TRUE)
@@ -59,14 +64,25 @@ for (i in 700:(756-window)) {
     if (class(optvalues)!="try-error") {
       old.weights <- optvalues$opt.weights
     }
+<<<<<<< HEAD
     if (class(optvalues)=="try-error") { 
     new.weights <- old.weights
     }
     portreturns <- c(portreturns, allsimreturns[(O*window*i):(O*window*(i+1)),] %*% new.weights)
+=======
+    if (class(optvalues)=="try-error") {
+      dist <- fit.NIGmv(alllogreturns[i:(O*(window+j)),],silent=TRUE)
+      optvalues <-portfolio.optimize(dist,risk.measure = "expected.shortfall",type = "minimum.risk",distr = "return",silent = TRUE)
     }
-}
-toc()
+    portreturns <- c(portreturns, allsimreturns[(O*window*(i)):(O*window*(i+1)),] %*% optvalues$opt.weights)
+>>>>>>> e9adb190aac0e54e15dcc5896c23f55bb4e3c94d
+    }
 
+<<<<<<< HEAD
+=======
+  }
+
+>>>>>>> e9adb190aac0e54e15dcc5896c23f55bb4e3c94d
 value<- Portsimreturns(alllogreturns,allsimreturns)
 #756
 tic()
