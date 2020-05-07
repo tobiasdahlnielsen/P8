@@ -1,4 +1,4 @@
-library(ghyp);library(tictoc);library(tidyverse);library(magrittr)
+library(ghyp);library(tictoc);library(tidyverse);library(magrittr);library(lubridate)
 
 setwd("~/P8")
 
@@ -43,36 +43,31 @@ HBAN %<>% mutate(Time = ymd_hms(utcsec), Price = price) %>% select(Time,Price,lo
 SPY  %<>% mutate(Time = ymd_hms(utcsec), Price = price) %>% select(Time,Price,logr,simr)
 
 O = which(SPY[["Time"]] == SPY[["Time"]][1] + days(1)) - 1
-
-#378
+window <- 21
 tic()
-for (i in 1:378) {
+for (i in 700:(756-window)) {
   print(i)
   if (i==1) {
-    dist <- fit.NIGmv(alllogreturns[1:O*2,],silent=TRUE)
+    dist <- fit.NIGmv(alllogreturns[1:O*window,],silent=TRUE)
     optvalues <- portfolio.optimize(dist,risk.measure = "expected.shortfall",type = "minimum.risk",distr = "return",silent = TRUE)
-    portreturns <- allsimreturns[1:O*2,] %*% optvalues$opt.weights
+    portreturns <- allsimreturns[(O*window):(O*window+1),] %*% optvalues$opt.weights
   }
-  # else if (i==27|i==28|i==32|i==38|i==42|i==83|i==83
-  #          |i==126|i==141|i==142|i==145|i==146|i==148|i==149|i==150|i==151) {
-  #   print("error")
-  # }
   else {
-    dist <- fit.NIGmv(alllogreturns[(O*2*(i-1)+1):(O*2*i),],silent=TRUE)
+    dist <- fit.NIGmv(alllogreturns[i:(O*(window+i)),],silent=TRUE)
     optvalues <-try(portfolio.optimize(dist,risk.measure = "expected.shortfall",type = "minimum.risk",distr = "return",silent = TRUE),silent=TRUE)
+    new.weights <- optvalues$opt.weights
     if (class(optvalues)!="try-error") {
-      j=i
+      old.weights <- optvalues$opt.weights
     }
-    if (class(optvalues)=="try-error") {
-      dist <- fit.NIGmv(alllogreturns[(O*2*(j-1)+1):(O*2*j),],silent=TRUE)
-      optvalues <-portfolio.optimize(dist,risk.measure = "expected.shortfall",type = "minimum.risk",distr = "return",silent = TRUE)
+    if (class(optvalues)=="try-error") { 
+    new.weights <- old.weights
     }
-    portreturns <- c(portreturns, allsimreturns[(O*2*(i-1)+1):(O*2*i),] %*% optvalues$opt.weights)
+    portreturns <- c(portreturns, allsimreturns[(O*window*i):(O*window*(i+1)),] %*% new.weights)
     }
 }
 toc()
 
-
+value<- Portsimreturns(alllogreturns,allsimreturns)
 #756
 tic()
 for (i in 651:756) {
