@@ -45,10 +45,10 @@ SPY  %<>% mutate(Time = ymd_hms(utcsec), Price = price) %>% select(Time,Price,lo
 O = which(SPY[["Time"]] == SPY[["Time"]][1] + days(1)) - 1
 window <- 21
 tic()
-for (i in 1:(756-(window+1))) {
-  if (i==1) {
+for (i in 0:(756-(window+1))) {
+  if (i==0) {
     dist <- fit.NIGmv(alllogreturns[1:O*window,],silent=TRUE)
-    optvalues <- portfolio.optimize(dist,risk.measure = "value.at.risk",type = "minimum.risk",distr = "return",silent = TRUE)
+    optvalues <- portfolio.optimize(dist,risk.measure = "expected.shortfall",type = "minimum.risk",distr = "return",silent = TRUE)
     portreturns <- allsimreturns[(O*window+1):(O*(window+1)),] %*% optvalues$opt.weights
   }
   else {
@@ -60,7 +60,7 @@ for (i in 1:(756-(window+1))) {
     if (dist@converged==FALSE) {
       new.dist <- old.dist
     }
-    optvalues <-try(portfolio.optimize(new.dist,risk.measure = "value.at.risk",type = "minimum.risk",distr = "return",silent = TRUE),silent=TRUE)
+    optvalues <-try(portfolio.optimize(new.dist,risk.measure = "expected.shortfall",type = "minimum.risk",distr = "return",silent = TRUE),silent=TRUE)
     if (class(optvalues)!="try-error") {
       old.weights <- optvalues$opt.weights
       new.weights <- optvalues$opt.weights
@@ -73,37 +73,7 @@ for (i in 1:(756-(window+1))) {
     }
 }
 toc()
-
-
-
-value<- Portsimreturns(alllogreturns,allsimreturns)
-#756
-tic()
-for (i in 651:756) {
-  print(i)
-  if (i==1) {
-    dist <- fit.NIGmv(alllogreturns[1:391,],silent=TRUE)
-    optvalues <- portfolio.optimize(dist,risk.measure = "value.at.risk",type = "minimum.risk",distr = "return",silent = TRUE)
-    portreturns <- allsimreturns[1:391,] %*% optvalues$opt.weights
-  }
-  # else if (i==27|i==28|i==32|i==38|i==42|i==83|i==83
-  #          |i==126|i==141|i==142|i==145|i==146|i==148|i==149|i==150|i==151) {
-  #   print("error")
-  # }
-  else {
-    dist <- fit.NIGmv(alllogreturns[(391*(i-1)+1):(391*i),],silent=TRUE)
-    optvalues <-try(portfolio.optimize(dist,risk.measure = "value.at.risk",type = "minimum.risk",distr = "return",silent = TRUE),silent=TRUE)
-    if (class(optvalues)!="try-error") {
-      j=i
-    }
-    if (class(optvalues)=="try-error") {
-      dist <- fit.NIGmv(alllogreturns[(391*(j-1)+1):(391*j),],silent=TRUE)
-      optvalues <-portfolio.optimize(dist,risk.measure = "value.at.risk",type = "minimum.risk",distr = "return",silent = TRUE)
-    }
-    portreturns <- c(portreturns, allsimreturns[(391*(i-1)+1):(391*i),] %*% optvalues$opt.weights)
-  }
-}
-toc()
+beep()
 
 
 
