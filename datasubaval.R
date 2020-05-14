@@ -1,6 +1,10 @@
-ACAS_fit = ACAS %>% pull(logr) %>% .[-1] %>% fit.NIGuv(silent=TRUE)
-ACAS_fit = ACAS %>% pull(logr) %>% .[-1] %>% nigFit(startValues = "MoM")
+library(ghyp);library(tictoc);library(tidyverse);library(magrittr);library(lubridate);library(GeneralizedHyperbolic)
+setwd("~/P8")
+load("~/P8/cleandata.RData")
+
+
 HBAN_fit = HBAN %>% pull(logr) %>% .[-1] %>% nigFit(startValues = "MoM")
+ACAS_fit = ACAS %>% pull(logr) %>% .[-1] %>% nigFit(startValues = "MoM",paramStart = HBAN_fit$param)
 SPY_fit = HBAN %>% pull(logr) %>% .[-1] %>% nigFit(startValues = "MoM")
 
 
@@ -19,11 +23,6 @@ hist(SPY$logr,breaks = 1000, xlim = c(-0.01, 0.01),probability = T)
 lines(x,y_SPY, col = "red")
 
 #5 minute test
-
-ACAS %<>% mutate(Time = ymd_hms(utcsec), Price = price) %>% select(Time,Price)
-HBAN %<>% mutate(Time = ymd_hms(utcsec), Price = price) %>% select(Time,Price)
-SPY %<>% mutate(Time = ymd_hms(utcsec), Price = price) %>% select(Time,Price)
-
 #Subset Every 5th minute 
 ACAS_5minute = ACAS %>% filter(minute(Time) %% 5 == 0)
 HBAN_5minute = HBAN %>% filter(minute(Time) %% 5 == 0)

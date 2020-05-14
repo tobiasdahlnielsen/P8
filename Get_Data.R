@@ -27,7 +27,7 @@ ACAS = getdbdata("ACAS")
 HBAN = getdbdata("HBAN")
 SPY  = getdbdata("SPY")
 
-
+HBAN <- HBAN %>% arrange(utcsec)
 
 
 ACAS %<>% logreturns %<>% simreturns
@@ -80,9 +80,6 @@ beep()
 
 
 
-ACAS %<>% mutate(Time = ymd_hms(utcsec), Price = price) %>% select(Time,Price,logr,simr)
-HBAN %<>% mutate(Time = ymd_hms(utcsec), Price = price) %>% select(Time,Price,logr,simr)
-SPY  %<>% mutate(Time = ymd_hms(utcsec), Price = price) %>% select(Time,Price,logr,simr)
 
 O = which(SPY[["Time"]] == SPY[["Time"]][1] + days(1)) - 1
 

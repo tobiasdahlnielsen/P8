@@ -7,7 +7,7 @@ pacman::p_load(dbplyr,RSQLite,DBI,tidyverse,dplyr,magrittr,tictoc,beepr)
 DB <- dbConnect(RSQLite::SQLite(), dbname = "./SPY.db")
 
 
-clean <- function(list,stock = "WFC",dir,close,DB){
+clean <- function(list,stock = "SPY",dir,close,DB){
   # Loop through list of data files
   for(file in list){
     
@@ -231,7 +231,7 @@ clean <- function(list,stock = "WFC",dir,close,DB){
       }
       
     }
-    data %>% arrange(utcsec)
+    data <- data %>% arrange(utcsec)
     rownames(data) <- 1:nrow(data)
     
     
