@@ -1,9 +1,8 @@
-library(ghyp);library(tictoc);library(tidyverse);library(magrittr);library(lubridate)
+library(ghyp);library(tictoc);library(tidyverse);library(magrittr);library(lubridate);library(dbplyr);library(RSQLite);library(DBI);library(tidyverse)
 
 setwd("~/P8")
 
 getdbdata = function(series,path = ""){
-  library(dbplyr);library(RSQLite);library(DBI);library(tidyverse)
   con = dbConnect(RSQLite::SQLite(), dbname = paste0(path,series,".db"))
   result = tbl(con, series) %>% collect() %>% unique()
   dbDisconnect(con)
