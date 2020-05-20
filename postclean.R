@@ -11,7 +11,7 @@ getdbdata = function(series,path = ""){
 
 logreturns = function(df){
   library(magrittr)
-  df %<>% mutate(logr= c(0,price %>% log %>% diff))
+  df %<>% mutate(logr= c(0,Price %>% log %>% diff))
   return(df)
 }
 simreturns =  function(df){
@@ -34,7 +34,7 @@ SPY <-  SPY %>% arrange(utcsec)
 ACAS %<>% logreturns %<>% simreturns
 HBAN %<>% logreturns %<>% simreturns
 SPY  %<>% logreturns %<>% simreturns
-
+AIG %<>% logreturns 
 
 alllogreturns <- cbind(SPY$logr,ACAS$logr,HBAN$logr)
 allsimreturns <- cbind(SPY$simr,ACAS$simr,HBAN$simr)
