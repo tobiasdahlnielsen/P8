@@ -12,7 +12,7 @@ getdbdata = function(series,path = ""){
 
 logreturns = function(df){
   library(magrittr)
-  df %<>% mutate(logr= c(0,price %>% log %>% diff))
+  df %<>% mutate(logr= c(0,Price %>% log %>% diff))
   return(df)
 }
 simreturns =  function(df){

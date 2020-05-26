@@ -34,7 +34,7 @@ SPY <-  SPY %>% arrange(utcsec)
 ACAS %<>% logreturns %<>% simreturns
 HBAN %<>% logreturns %<>% simreturns
 SPY  %<>% logreturns %<>% simreturns
-AIG %<>% logreturns 
+
 
 alllogreturns <- cbind(SPY$logr,ACAS$logr,HBAN$logr)
 allsimreturns <- cbind(SPY$simr,ACAS$simr,HBAN$simr)

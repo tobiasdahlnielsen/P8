@@ -29,20 +29,27 @@ if (lim==TRUE) {
   histogram <- ggplot(Data[Interval[start.time,1]:Interval[start.time,2],],aes(logr)) + 
     geom_histogram(aes(y = stat(density),fill = 1,colour = 1),bins = breaks) + 
     xlim(c(-0.01,0.01)) +
+    labs(x = "Logreturns")+
     stat_function(
       fun = f, 
       lwd = 1, colour = 1
-    ) + theme(legend.position = "none",legend.title = element_blank() )
-  
+    ) + theme(legend.position = "none",legend.title = element_blank(),
+              panel.background=element_blank(),
+              axis.line.x.bottom = element_line(color = 'black'),
+              axis.line.y.left   = element_line(color = 'black'))
   
 }
 else  {
 histogram <- ggplot(Data[Interval[start.time,1]:Interval[start.time,2],],aes(logr)) + 
   geom_histogram(aes(y = stat(density),fill = 1,colour = 1),bins = breaks) + 
+  labs(x = "Logreturns")+
   stat_function(
     fun = f, 
     lwd = 1, colour = 1
-  ) + theme(legend.position = "none",legend.title = element_blank() )
+  ) + theme(legend.position = "none",legend.title = element_blank(),
+            panel.background=element_blank(),
+            axis.line.x.bottom = element_line(color = 'black'),
+            axis.line.y.left   = element_line(color = 'black'))
 }
 
 quants <- function(p){
@@ -51,7 +58,10 @@ quants <- function(p){
 
 qqplot <- ggplot(Data[Interval[start.time,1]:Interval[start.time,2],], aes(sample = logr)) +
   stat_qq(distribution = quants) + 
-  stat_qq_line(distribution = quants)
+  stat_qq_line(distribution = quants)+
+  theme(panel.background=element_blank(),
+        axis.line.x.bottom = element_line(color = 'black'),
+        axis.line.y.left   = element_line(color = 'black'))
 
 
 ggpubr::ggarrange(histogram + ggtitle(NULL), qqplot , 
@@ -62,20 +72,18 @@ ggpubr::ggarrange(histogram + ggtitle(NULL), qqplot ,
 ##########################################################################################
 #1 minute
 O = which(SPY[["Time"]] == SPY[["Time"]][1] + days(1)) - 1
-testday <- 250
-window <- 21
+testday <- 965
+window <- 21*3
 
 
 ACAS_fit = ACAS[(testday*O+1):(testday*O+O*window),] %>% pull(logr) %>% .[-1] %>% fit.NIGuv(silent=T)
 HBAN_fit = HBAN[(testday*O+1):(testday*O+O*window),] %>% pull(logr) %>% .[-1] %>% fit.NIGuv(silent=T)
 SPY_fit  = SPY [(testday*O+1):(testday*O+O*window),] %>% pull(logr) %>% .[-1] %>% fit.NIGuv(silent=T)
-ACAS_fit = AIG[(testday*O+1):(testday*O+O*window),] %>% pull(logr) %>% .[-1] %>% fit.NIGuv(silent=T)
 
 
-
-validation(ACAS,testday,window*O,O,ACAS_fit)
-validation(HBAN,testday,window*O,O,HBAN_fit)
-validation(SPY ,testday,window*O,O,SPY_fit)
+validation(ACAS,testday,window*O,O,ACAS_fit,lim=FALSE)
+validation(HBAN,testday,window*O,O,HBAN_fit,lim=FALSE)
+validation(SPY ,testday,window*O,O,SPY_fit,lim=FALSE)
 
 
 x = seq(from = -0.01, to = 0.01, length.out = 1000)
@@ -110,16 +118,16 @@ HBAN_5minute %<>% logreturns %<>% simreturns
 SPY_5minute  %<>% logreturns %<>% simreturns
 
 O = which(SPY_5minute[["Time"]] == SPY_5minute[["Time"]][1] + days(1)) - 1
-testday <- 1072
+testday <- 965
 window <- 21
 
 ACAS_5minute_fit = ACAS_5minute[(testday*O+1):(testday*O+O*window),] %>% pull(logr) %>% .[-1] %>% fit.NIGuv(silent=T)
 HBAN_5minute_fit = HBAN_5minute[(testday*O+1):(testday*O+O*window),] %>% pull(logr) %>% .[-1] %>% fit.NIGuv(silent=T)
 SPY_5minute_fit  = SPY_5minute [(testday*O+1):(testday*O+O*window),] %>% pull(logr) %>% .[-1] %>% fit.NIGuv(silent=T)
 
-validation(ACAS_5minute,testday,window*O,O,ACAS_5minute_fit)
-validation(HBAN_5minute,testday,window*O,O,HBAN_5minute_fit,breaks = 60)
-validation(SPY_5minute,testday,window*O,O,SPY_5minute_fit)
+validation(ACAS_5minute,testday,window*O,O,ACAS_5minute_fit,lim = F)
+validation(HBAN_5minute,testday,window*O,O,HBAN_5minute_fit,lim = F)
+validation(SPY_5minute,testday,window*O,O,SPY_5minute_fit,lim = F)
 
 
 
