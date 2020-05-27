@@ -72,8 +72,8 @@ ggpubr::ggarrange(histogram + ggtitle(NULL), qqplot ,
 ##########################################################################################
 #1 minute
 O = which(SPY[["Time"]] == SPY[["Time"]][1] + days(1)) - 1
-testday <- 965
-window <- 21*3
+testday <- 505
+window <- 21
 
 
 ACAS_fit = ACAS[(testday*O+1):(testday*O+O*window),] %>% pull(logr) %>% .[-1] %>% fit.NIGuv(silent=T)
@@ -125,9 +125,9 @@ ACAS_5minute_fit = ACAS_5minute[(testday*O+1):(testday*O+O*window),] %>% pull(lo
 HBAN_5minute_fit = HBAN_5minute[(testday*O+1):(testday*O+O*window),] %>% pull(logr) %>% .[-1] %>% fit.NIGuv(silent=T)
 SPY_5minute_fit  = SPY_5minute [(testday*O+1):(testday*O+O*window),] %>% pull(logr) %>% .[-1] %>% fit.NIGuv(silent=T)
 
-validation(ACAS_5minute,testday,window*O,O,ACAS_5minute_fit,lim = F)
-validation(HBAN_5minute,testday,window*O,O,HBAN_5minute_fit,lim = F)
-validation(SPY_5minute,testday,window*O,O,SPY_5minute_fit,lim = F)
+validation(ACAS_5minute,testday,window*O,O,ACAS_5minute_fit,lim=F)
+validation(HBAN_5minute,testday,window*O,O,HBAN_5minute_fit,lim=F)
+validation(SPY_5minute,testday,window*O,O,SPY_5minute_fit,lim=F)
 
 
 

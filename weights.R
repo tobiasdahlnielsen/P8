@@ -64,21 +64,22 @@ b <- weightreturns(allsimreturns_5min,alllogreturns_5min,window,O)
 
 
 periode <- SPY_5minute$Time[(O*window+1):length(SPY_5minute$logr)]
-plot(x=periode,y=cumsum(log(b[["sd"]]+1)),type="l",ylim=c(-1,0.45),xlab="Time",ylab="Cumulated simple returns",col=1)
+plot(x=periode,y=cumsum(log(returns[["sd"]]+1)),type="l",ylim=c(-1,0.45),xlab="Time",ylab="Cumulated simple returns",col=1)
 lines(periode,exp(cumsum(SPY_5minute$logr[(O*window+1):length(SPY_5minute$logr)]))-1,col="purple")
 lines(periode,exp(cumsum(ACAS_5minute$logr[(O*window+1):length(SPY_5minute$logr)]))-1,col="orange")
 lines(periode,exp(cumsum(HBAN_5minute$logr[(O*window+1):length(SPY_5minute$logr)]))-1,col="green")
-lines(periode,exp(cumsum(log(b[["expected.shortfall"]]+1)))-1,col="blue")
+lines(periode,exp(cumsum(log(returns[["expected.shortfall"]]+1)))-1,col="blue")
 legend("bottomleft",legend = c("MVP","SPY","ACAS","HBAN","CVAR"),col = c("black","purple","orange","green","blue"),lty=1)
 
-plot(x=periode,y=exp(cumsum(log(b[["expected.shortfall"]]+1)))-1,type="l",xlab="Time",ylab="Cumulated simple returns",col=1)
+plot(x=periode,y=exp(cumsum(log(returns[["expected.shortfall"]]+1)))-1,type="l",xlab="Time",ylab="Cumulated simple returns",col=1)
+
+plot(x=periode,y=returns[["expected.shortfall"]],type="l",xlab="Time",ylab="Simple returns",col=1)
 
 
-
-plot(periode,pmax(exp(cumsum(log(b[["expected.shortfall"]]+1)))-
+plot(periode,pmax(exp(cumsum(log(returns[["expected.shortfall"]]+1)))-
                     exp(cumsum(SPY_5minute$logr[(O*window+1):length(SPY_5minute$logr)])),0),
      type="l",ylim=c(-0.15,0.1),ylab="logreturns",xlab="Time")
-lines(periode,pmin(exp(cumsum(log(b[["expected.shortfall"]]+1)))-exp(cumsum(SPY_5minute$logr[(O*window+1):length(SPY_5minute$logr)])),0),col="red")
+lines(periode,pmin(exp(cumsum(log(returns[["expected.shortfall"]]+1)))-exp(cumsum(SPY_5minute$logr[(O*window+1):length(SPY_5minute$logr)])),0),col="red")
 abline(0,0)
 
 periode2 <- SPY_5minute$Time

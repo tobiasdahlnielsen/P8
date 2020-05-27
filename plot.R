@@ -100,8 +100,18 @@ plot(wperiode,pweights[[1]][,3],type="l",ylab="weights",xlab="Time",main="HBAN")
 lines(wperiode,pweights[[3]][,3],col="red")
 legend("topleft",legend = c("CVAR","MVP"),col = c("black","red"),lty=1)
 
+####################################simple returns#############################################
+
+par(mfrow=c(1,1))
+plot(ACAS$Time,ACAS$simr,type="l",xlab="Time",ylab="Simple returns")
+plot(HBAN$Time,HBAN$simr,type="l",xlab="Time",ylab="Simple returns")
+plot(SPY$Time,SPY$simr,type="l",xlab="Time",ylab="Simple returns")
 
 
+
+###################################CVAR cumsum returns#######################################
+
+cumreturns <- cumsum(log(returns$expected.shortfall+1))
 
 
 
