@@ -115,5 +115,10 @@ cumreturns <- cumsum(log(returns$expected.shortfall+1))
 
 
 
+##############################################################################################
+plot(stocks$AIG$price)
+
+
+
 
 
