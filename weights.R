@@ -57,7 +57,7 @@ for (j in 1:length(risk)) {
 }
 
 a <- weightreturns(allsimreturns,alllogreturns,window,O)
-b <- weightreturns(allsimreturns_5min,alllogreturns_5min,window,O)
+b <- weightreturns(allsimreturns_5min,alllogreturns_5min,window,O,risk=c("expected.shortfall","sd"))
 
 
 

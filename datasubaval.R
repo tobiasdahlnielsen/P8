@@ -86,28 +86,9 @@ validation(HBAN,testday,window*O,O,HBAN_fit,lim=FALSE)
 validation(SPY ,testday,window*O,O,SPY_fit,lim=FALSE)
 
 
-x = seq(from = -0.01, to = 0.01, length.out = 1000)
-y_ACAS = sapply(x,function(x){ghyp::dghyp(x,ACAS_fit)})
-y_HBAN = sapply(x,function(x){ghyp::dghyp(x,HBAN_fit)})
-y_SPY = sapply(x,function(x){ghyp::dghyp(x,SPY_fit)})
-
-hist(ACAS$logr,breaks = 1000, xlim = c(-0.01, 0.01),probability = T)
-lines(x,y_ACAS, col = "red")
-
-hist(HBAN$logr,breaks = 1000, xlim = c(-0.01, 0.01),probability = T)
-lines(x,y_HBAN, col = "red")
-
-hist(SPY$logr,breaks = 1000, xlim = c(-0.01, 0.01),probability = T)
-lines(x,y_SPY, col = "red")
-
-ghyp::qqghyp(HBAN_fit,gaussian =F)
-ghyp::qqghyp(ACAS_fit,gaussian =F)
-ghyp::qqghyp(SPY_fit,gaussian =F)
-
-
 
 ##############################################################################################
-#5 minute test
+#5 minute
 
 ACAS_5minute = ACAS[,1:2] %>% filter(minute(Time) %% 5 == 0)
 HBAN_5minute = HBAN[,1:2] %>% filter(minute(Time) %% 5 == 0)
@@ -130,21 +111,3 @@ validation(HBAN_5minute,testday,window*O,O,HBAN_5minute_fit,lim=F)
 validation(SPY_5minute,testday,window*O,O,SPY_5minute_fit,lim=F)
 
 
-
-x = seq(from = -0.01, to = 0.01, length.out = 1000)
-y_ACAS_5minute = sapply(x,function(x){ghyp::dghyp(x,ACAS_5minute_fit)})
-y_HBAN_5minute = sapply(x,function(x){ghyp::dghyp(x,HBAN_5minute_fit)})
-y_SPY_5minute  = sapply(x,function(x){ghyp::dghyp(x,SPY_5minute_fit)})
-
-hist(ACAS_5minute$logr,breaks = 1000, xlim = c(-0.01, 0.01),probability = T)
-lines(x,y_ACAS_5minute, col = "red")
-
-hist(HBAN_5minute$logr,breaks = 1000, xlim = c(-0.01, 0.01),probability = T)
-lines(x,y_HBAN_5minute, col = "red")
-
-hist(SPY_5minute$logr,breaks = 1000, xlim = c(-0.005, 0.005),probability = T)
-lines(x,y_SPY_5minute, col = "red")
-
-ghyp::qqghyp(HBAN_5minute_fit,gaussian =F)
-ghyp::qqghyp(ACAS_5minute_fit,gaussian =F)
-ghyp::qqghyp(SPY_5minute_fit,gaussian =F)

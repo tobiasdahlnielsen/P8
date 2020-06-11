@@ -87,7 +87,7 @@ plot(rnorm(19907,sd=sqrt(1/19907)),type="l",ylim=c(-0.1,0.1),ylab="Increments",x
 
 wperiode <- periode[seq(1,length(periode),by=79)]
 
-par(mfrow=c(3,1))
+par(mfrow=c(2,1))
 plot(wperiode,pweights[[1]][,1],type="l",ylab="weights",xlab="Time",main="SPY")
 lines(wperiode,pweights[[3]][,1],col="red")
 legend("topleft",legend = c("CVAR","MVP"),col = c("black","red"),lty=1)

@@ -1,0 +1,10 @@
+library(ghyp);library(tictoc);library(tidyverse);library(magrittr);library(lubridate);library(beepr)
+setwd("~/P8")
+load("~/P8/riskcalc.RData")
+
+tic()
+a <- weightreturns(threestocksimreturns,threestocklogreturns,window,O,risk=c("expected.shortfall","sd"))
+#b <- weightreturns(allstockssimreturns,allstockslogreturns,window,O,risk=c("expected.shortfall","sd"))
+c <- weightreturns(adjsimreturns_5min,adjlogreturns_5min,window,O,risk=c("expected.shortfall","sd"))
+toc()
+beep()
